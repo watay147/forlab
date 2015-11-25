@@ -61,7 +61,7 @@ class DBPipeline(object):
             try:
                 self.cursor.execute("insert ignore into `gubarticleupdate%s` (title,articleid,stockno,reply,click,crawldate) value ('%s',%s,'%s',%s,%s,'%s')"% ((self.stockno,)+instance))
             except Exception,e:
-                sendmail(u'数据库错误:'+unicode(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())))
+                sendmail(u'数据库错误:'+unicode(e)+unicode(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())))
                 while True:
                     try:
                         self.conn = MySQLdb.Connect( user='root',  db='guba',charset='utf8')
@@ -90,7 +90,7 @@ class DBPipeline(object):
             try:
                 self.cursor.execute("insert ignore into `reply%s` (commentAuthor,commentDate,commentContent,commentAuthorid,articleid) value ('%s','%s','%s',%s,%s)"% ((self.stockno,)+instance))
             except Exception,e:
-                sendmail(u'数据库错误:'+unicode(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())))
+                sendmail(u'数据库错误:'+unicode(e)+unicode(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())))
                 while True:
                     try:
                         self.conn = MySQLdb.Connect( user='root',  db='guba',charset='utf8')
@@ -108,7 +108,7 @@ class DBPipeline(object):
         try:
             self.cursor.execute("insert ignore into `article%s` (title,author,stockno,time,content,articleid) value ('%s','%s','%s','%s','%s',%s)"% ((self.stockno,)+instance))#insert ignore会自动避免重复插入
         except Exception,e:
-            sendmail(u'数据库错误:'+unicode(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())))
+            sendmail(u'数据库错误:'+unicode(e)+unicode(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())))
             while True:
                 try:
                     self.conn = MySQLdb.Connect( user='root',  db='guba',charset='utf8')
@@ -127,7 +127,7 @@ class DBPipeline(object):
             try:
             self.cursor.execute("insert ignore into `reply%s` (commentAuthor,commentDate,commentContent,commentAuthorid,articleid) value ('%s','%s','%s',%s,%s)"% (self.stockno,)+instance)
             except Exception,e:
-                sendmail(u'数据库错误:'+unicode(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())))
+                sendmail(u'数据库错误:'+unicode(e)+unicode(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())))
                 while True:
                     try:
                         self.conn = MySQLdb.Connect( user='root',  db='guba',charset='utf8')

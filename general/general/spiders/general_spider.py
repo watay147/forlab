@@ -265,7 +265,7 @@ class GeneralSpider(scrapy.Spider):
             except Exception,e:
                 self.log.write(str(e)+'\n')
                 self.log.flush()
-                sendmail(u'浏览器错误:'+unicode(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())))
+                sendmail(u'浏览器错误:'+unicode(e)+unicode(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())))
                 #self.browser.close()
                 #self.browser= webdriver.Firefox()
                 #self.browser.implicitly_wait(60)
