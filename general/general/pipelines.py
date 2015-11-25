@@ -125,7 +125,7 @@ class DBPipeline(object):
         itemlist=zip(item['ZcommentAuthor'],item['ZcommentDate'],item['ZcommentContent'],item['ZcommentAuthorid'],item['Zarticleid'])
         for instance in itemlist:
             try:
-            self.cursor.execute("insert ignore into `reply%s` (commentAuthor,commentDate,commentContent,commentAuthorid,articleid) value ('%s','%s','%s',%s,%s)"% (self.stockno,)+instance)
+                self.cursor.execute("insert ignore into `reply%s` (commentAuthor,commentDate,commentContent,commentAuthorid,articleid) value ('%s','%s','%s',%s,%s)"% (self.stockno,)+instance)
             except Exception,e:
                 sendmail(u'数据库错误:'+unicode(e)+unicode(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())))
                 while True:

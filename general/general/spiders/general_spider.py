@@ -91,9 +91,10 @@ class GeneralSpider(scrapy.Spider):
     def __init__(self):
         #启动对浏览器的操控
         startf=open('start.txt')#相对路径起点是project根目录
-        self.start_urls=eval(startf.read())
+        self.start_urls=[startf.read()]
         startf.close()
         self.browser= webdriver.Firefox()
+        self.browser.get("http://www.baidu.com")
         self.browser.implicitly_wait(60)
         self.f=open('test.txt','w')#用于存储测试输出内容的文本文件
         self.log=open('log.txt','w')
