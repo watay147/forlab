@@ -1315,7 +1315,7 @@ l=[
 for index,i in enumerate(l):
     print index
     num=re.search(r',\d+',i).group(0)[1:]
-    cursor.execute("CREATE TABLE IF NOT EXISTS `reply%s` (`commentAuthor` varchar(40) NOT NULL,`commentDate` datetime NOT NULL,`commentContent` varchar(500) NOT NULL,`commentAuthorid` bigint(64) NOT NULL,`articleid` int(64) NOT NULL,UNIQUE KEY `uk_t_1` (`commentAuthorid`,`commentDate`)) ENGINE=InnoDB DEFAULT CHARSET=utf8; "% (num,))
+    cursor.execute("CREATE TABLE IF NOT EXISTS `reply%s` (`commentAuthor` varchar(40) NOT NULL,`commentDate` datetime NOT NULL,`commentContent` varchar(500) NOT NULL,`commentAuthorid` bigint(64) NOT NULL,`articleid` int(64) NOT NULL,`point` double,UNIQUE KEY `uk_t_1` (`commentAuthorid`,`commentDate`)) ENGINE=InnoDB DEFAULT CHARSET=utf8; "% (num,))
     cursor.execute('''CREATE TABLE IF NOT EXISTS `gubarticleupdate%s` (
   `title` varchar(100) NOT NULL,
   `articleid` int(40) NOT NULL,
@@ -1332,6 +1332,7 @@ for index,i in enumerate(l):
   `content` text NOT NULL,
   `author` varchar(40) NOT NULL,
   `time` datetime NOT NULL,
+  `point` double,
   UNIQUE KEY `articleid` (`articleid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;'''% (num,))
     conn.commit()
