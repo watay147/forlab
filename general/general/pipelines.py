@@ -12,6 +12,8 @@ import MySQLdb
 import time
 import re
 def sendmail(msgcontent,to_addr="449339387@qq.com"):
+    if re.search('1064',msgcontent):
+        return
     smtp_server="smtp.126.com"
     from_addr="finbigdata@126.com"
     password="iemxlrfnypsmozuu"
