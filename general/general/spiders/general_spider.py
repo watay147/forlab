@@ -27,7 +27,7 @@
 #########################################################################
 
 import scrapy
-import os
+
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -44,6 +44,8 @@ from general.items import YMulItem
 from general.items import YSinItem
 from general.items import ZMulItem
 from general.items import ZSinItem
+import os
+
 def sendmail(msgcontent,to_addr="449339387@qq.com"):
     smtp_server="smtp.126.com"
     from_addr="finbigdata@126.com"
@@ -90,6 +92,11 @@ class GeneralSpider(scrapy.Spider):
 
     def __init__(self):
         #启动对浏览器的操控
+        os.environ['CLASSPATH']=r'F:/personalproject/forlab/general/sa.jar'
+        import jnius
+        from jnius import autoclass
+        sentiClassifier = autoclass('sentiClassifier.EnsemblePolarityClassifier')
+        self.sentiM=sentiClassifier()
         startf=open('start.txt')#相对路径起点是project根目录
         self.start_urls=[startf.read()]
         startf.close()

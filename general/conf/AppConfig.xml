@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pamameters>
+	<!---->
+	<!-- <user_dict_path>resource\userdict.txt</user_dict_path> -->
+	<project_path>F:/personalproject/forlab/general/</project_path>
+	<sina_emotion_path>resource/emotions.txt</sina_emotion_path> 
+	<stoplist>resource/stoplist.txt</stoplist>
+	<sentiment_lexicon>resource/sentimentLexicon.txt</sentiment_lexicon>
+	<copus_dict_path>resource/copusDictionary.txt</copus_dict_path>
+	<model_path>resource/polarity.model</model_path>
+	
+	<subjectivity_data_path>resource/subjectivitydata.txt</subjectivity_data_path>
+	<subjectivity_model_path>resource/subjectivitydata.model</subjectivity_model_path>
+	
+	<train_text_path>resource/standardTrain.txt</train_text_path>
+	<test_text_path>resource/testText.txt</test_text_path>
+	<weibo_all>resource/standardWeibo.txt</weibo_all>
+	
+	<database_host>127.0.0.1</database_host>
+	<database_name>guba</database_name>
+	<database_user>root</database_user>
+	<database_passd></database_passd>
+</pamameters>

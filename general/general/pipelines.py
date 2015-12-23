@@ -11,6 +11,8 @@ from email.header import Header
 import MySQLdb
 import time
 import re
+import os
+from jnius import autoclass
 def sendmail(msgcontent,to_addr="449339387@qq.com"):
     if re.search('1064',msgcontent):
         return
@@ -30,7 +32,7 @@ def sendmail(msgcontent,to_addr="449339387@qq.com"):
     server.close()
 class DBPipeline(object):
 
-    def open_spider(self, spider):
+    def open_spider(self, spider): 
         self.storeFunc={'XMulItem':self.storeXMulItem,
 			'XSinItem':self.storeXSinItem,
 			'YMulItem':self.storeYMulItem,
@@ -42,6 +44,8 @@ class DBPipeline(object):
         self.cursor=self.conn.cursor() 
         self.crawldate=time.strftime("%Y-%m-%d",time.localtime())
         self.stockno=re.search(r',\d+',spider.start_urls[0]).group(0)[1:]
+        self.spider=spider
+
 
     def process_item(self, item, spider):
         
@@ -90,7 +94,8 @@ class DBPipeline(object):
         itemlist=zip(item['YcommentAuthor'],item['YcommentDate'],item['YcommentContent'],item['YcommentAuthorid'],item['Yarticleid'])
         for instance in itemlist:
             try:
-                self.cursor.execute("insert ignore into `reply%s` (commentAuthor,commentDate,commentContent,commentAuthorid,articleid) value ('%s','%s','%s',%s,%s)"% ((self.stockno,)+instance))
+                point = self.spider.sentiM.getPolarity(instance[2])
+                self.cursor.execute("insert ignore into `reply%s` (point,commentAuthor,commentDate,commentContent,commentAuthorid,articleid) value ( %f,'%s','%s','%s',%s,%s)"% ((self.stockno,point)+instance))
             except Exception,e:
                 sendmail(u'数据库错误:'+unicode(e)+unicode(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())))
                 while True:
@@ -108,7 +113,8 @@ class DBPipeline(object):
     def storeYSinItem(self,item):
         instance=(item['Ytitle'],item['Yauthor'],item['Ystockno'],item['Ydate'],item['Ycontent'],item['Yarticleid'])
         try:
-            self.cursor.execute("insert ignore into `article%s` (title,author,stockno,time,content,articleid) value ('%s','%s','%s','%s','%s',%s)"% ((self.stockno,)+instance))#insert ignore会自动避免重复插入
+            contentpoint = self.spider.sentiM.getPolarity(instance[4])
+            self.cursor.execute("insert ignore into `article%s` (point,title,author,stockno,time,content,articleid) value (%f,'%s','%s','%s','%s','%s',%s)"% ((self.stockno,contentpoint)+instance))#insert ignore会自动避免重复插入
         except Exception,e:
             sendmail(u'数据库错误:'+unicode(e)+unicode(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())))
             while True:
