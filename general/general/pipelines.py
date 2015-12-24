@@ -133,7 +133,8 @@ class DBPipeline(object):
         itemlist=zip(item['ZcommentAuthor'],item['ZcommentDate'],item['ZcommentContent'],item['ZcommentAuthorid'],item['Zarticleid'])
         for instance in itemlist:
             try:
-                self.cursor.execute("insert ignore into `reply%s` (commentAuthor,commentDate,commentContent,commentAuthorid,articleid) value ('%s','%s','%s',%s,%s)"% (self.stockno,)+instance)
+                point = self.spider.sentiM.getPolarity(instance[2])
+                self.cursor.execute("insert ignore into `reply%s` (point,commentAuthor,commentDate,commentContent,commentAuthorid,articleid) value ( %f,'%s','%s','%s',%s,%s)"% ((self.stockno,point)+instance))
             except Exception,e:
                 sendmail(u'数据库错误:'+unicode(e)+unicode(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())))
                 while True:
