@@ -2,3 +2,5 @@
 ./resource
 ./resource/*
 *.jar
+*.csv
+*.model
