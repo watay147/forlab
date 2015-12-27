@@ -1,4 +1,5 @@
 ./conf
+./conf/*
 ./resource
 ./resource/*
 *.jar

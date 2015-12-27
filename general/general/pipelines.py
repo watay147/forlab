@@ -11,8 +11,7 @@ from email.header import Header
 import MySQLdb
 import time
 import re
-import os
-from jnius import autoclass
+
 def sendmail(msgcontent,to_addr="449339387@qq.com"):
     if re.search('1064',msgcontent):
         return
@@ -22,7 +21,10 @@ def sendmail(msgcontent,to_addr="449339387@qq.com"):
     msg = MIMEMultipart()
     msg['From'] = from_addr
     msg['To'] = to_addr
-    msg['Subject'] = Header(u'爬虫异常提醒', 'utf-8').encode()
+    startwith=""
+    with open("conf/spiderConf.txt") as f:
+        startwith=eval(f.read())['email_tag']
+    msg['Subject'] = Header(unicode(startwith)+u'爬虫异常提醒', 'utf-8').encode()
     txt = MIMEText(msgcontent, 'plain', 'utf-8')
     msg.attach(txt)
     server = smtplib.SMTP() # SMTP协议默认端口是25

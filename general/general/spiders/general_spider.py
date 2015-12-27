@@ -44,23 +44,11 @@ from general.items import YMulItem
 from general.items import YSinItem
 from general.items import ZMulItem
 from general.items import ZSinItem
-import os
+import xml.etree.ElementTree as ET
+from general.pipelines import sendmail
 
-def sendmail(msgcontent,to_addr="449339387@qq.com"):
-    smtp_server="smtp.126.com"
-    from_addr="finbigdata@126.com"
-    password="iemxlrfnypsmozuu"
-    msg = MIMEMultipart()
-    msg['From'] = from_addr
-    msg['To'] = to_addr
-    msg['Subject'] = Header(u'爬虫异常提醒', 'utf-8').encode()
-    txt = MIMEText(msgcontent, 'plain', 'utf-8')
-    msg.attach(txt)
-    server = smtplib.SMTP() # SMTP协议默认端口是25
-    server.connect(smtp_server)
-    server.login(from_addr, password)
-    server.sendmail(from_addr, [to_addr], msg.as_string())
-    server.close()
+
+
 class GeneralSpider(scrapy.Spider):
     name = 'general'
     start_urls = ["http://guba.eastmoney.com/list,000415_739.html"]
@@ -92,7 +80,10 @@ class GeneralSpider(scrapy.Spider):
 
     def __init__(self):
         #启动对浏览器的操控
-        os.environ['CLASSPATH']=r'F:/personalproject/forlab/general/sa.jar'
+        import os
+        tree=ET.parse('conf/AppConfig.xml')
+        project_path=tree.find("project_path").text
+        os.environ['CLASSPATH']=project_path+'sa.jar'
         import jnius
         from jnius import autoclass
         sentiClassifier = autoclass('sentiClassifier.EnsemblePolarityClassifier')
