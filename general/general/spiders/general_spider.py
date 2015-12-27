@@ -75,6 +75,10 @@ class GeneralSpider(scrapy.Spider):
     ZcommentAuthorid=ZcommentAuthor
     ZcommentDate="//div[@class='zwlitime']"
     ZcommentContent="//div[@class='zwlitx']/div/div[3]"
+
+    XendDate="//div[@class='articleh']/span[5]"
+    should_end=False
+    end_date=""
     
 
 
@@ -88,6 +92,14 @@ class GeneralSpider(scrapy.Spider):
         from jnius import autoclass
         sentiClassifier = autoclass('sentiClassifier.EnsemblePolarityClassifier')
         self.sentiM=sentiClassifier()
+
+        with open("conf/spiderConf.txt") as f:
+            conf=eval(f.read())
+            self.should_end=conf.get("should_end",False)
+            if self.should_end:
+                self.end_date=conf.get("end_date",time.strftime("%m-%d",time.localtime()))
+
+
         startf=open('start.txt')#相对路径起点是project根目录
         self.start_urls=[startf.read()]
         startf.close()
@@ -186,6 +198,14 @@ class GeneralSpider(scrapy.Spider):
                print res.group(0)
                return res.group(0)
         return ""
+
+    def extractDate(self,s):
+        s=self.extracttext(s)
+        if s:
+            res=re.search(r'(\d\d-\d\d)',s)
+            if res:
+                return res.group(1)
+        return ""
     #取出整数部分
     def extractint(self,s):
         s=self.extracttext(s)
@@ -217,6 +237,12 @@ class GeneralSpider(scrapy.Spider):
         #if self.countX>self.maxX:
         #    return
         #爬取X页的多重属性
+        if self.should_end:
+            endDate=self.extractDate(response.xpath(self.XendDate)[0].extract())
+            if endDate>self.end_date:
+                return
+
+
         Xmuls=XMulItem()
         for name,target in self.XMulTarget:
             Xmuls[name]=deque()
@@ -245,6 +271,8 @@ class GeneralSpider(scrapy.Spider):
 
         self.f.write(response.url+"\n")
         self.f.flush()
+
+
 
         nexthref=response.xpath(self.Xnextlink)
         #构造到下一个同层页的链接
