@@ -36,13 +36,14 @@ class DBPipeline(object):
 
     def open_spider(self, spider): 
         self.storeFunc={'XMulItem':self.storeXMulItem,
-			'XSinItem':self.storeXSinItem,
-			'YMulItem':self.storeYMulItem,
-			'YSinItem':self.storeYSinItem,
-			'ZMulItem':self.storeZMulItem,
-			'ZSinItem':self.storeZSinItem,
-			}
-        self.conn = MySQLdb.Connect( user='root',  db='guba',charset='utf8')
+            'XSinItem':self.storeXSinItem,
+            'YMulItem':self.storeYMulItem,
+            'YSinItem':self.storeYSinItem,
+            'ZMulItem':self.storeZMulItem,
+            'ZSinItem':self.storeZSinItem,
+            }
+        self.db='gubaupdate'
+        self.conn = MySQLdb.Connect( user='root',  db=self.db,charset='utf8')
         self.cursor=self.conn.cursor() 
         self.crawldate=time.strftime("%Y-%m-%d",time.localtime())
         self.stockno=re.search(r',\d+',spider.start_urls[0]).group(0)[1:]
@@ -72,7 +73,7 @@ class DBPipeline(object):
                 sendmail(u'数据库错误:'+unicode(e)+unicode(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())))
                 while True:
                     try:
-                        self.conn = MySQLdb.Connect( user='root',  db='guba',charset='utf8')
+                        self.conn = MySQLdb.Connect( user='root',  db=self.db,charset='utf8')
                         break
                     except Exception,e:
                         time.sleep(2)
@@ -102,7 +103,7 @@ class DBPipeline(object):
                 sendmail(u'数据库错误:'+unicode(e)+unicode(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())))
                 while True:
                     try:
-                        self.conn = MySQLdb.Connect( user='root',  db='guba',charset='utf8')
+                        self.conn = MySQLdb.Connect( user='root',  db=self.db,charset='utf8')
                         break
                     except Exception,e:
                         time.sleep(2)
@@ -121,7 +122,7 @@ class DBPipeline(object):
             sendmail(u'数据库错误:'+unicode(e)+unicode(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())))
             while True:
                 try:
-                    self.conn = MySQLdb.Connect( user='root',  db='guba',charset='utf8')
+                    self.conn = MySQLdb.Connect( user='root',  db=self.db,charset='utf8')
                     break
                 except Exception,e:
                     time.sleep(2)
@@ -141,7 +142,7 @@ class DBPipeline(object):
                 sendmail(u'数据库错误:'+unicode(e)+unicode(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())))
                 while True:
                     try:
-                        self.conn = MySQLdb.Connect( user='root',  db='guba',charset='utf8')
+                        self.conn = MySQLdb.Connect( user='root',  db=self.db,charset='utf8')
                         break
                     except Exception,e:
                         time.sleep(2)
