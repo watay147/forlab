@@ -14,7 +14,7 @@ for index,i in enumerate(l):
     cursor.execute("select count(*) from `article%s`" % (stockno,))
     results=cursor.fetchall()
     if results[0][0]==0:
-        nonf.write(stockno+',\n')
+        nonf.write('\''+stockno+'\',\n')
         nonf.flush()
     countNum+=results[0][0]
     f.write("count:"+str(countNum)+'\n')
