@@ -239,7 +239,9 @@ class GeneralSpider(scrapy.Spider):
         #爬取X页的多重属性
         if self.should_end:
             endDate=self.extractDate(response.xpath(self.XendDate)[0].extract())
-            if endDate>self.end_date:
+            if endDate >"00" and endDate <"03":
+                pass
+            elif endDate<self.end_date:
                 return
 
 
