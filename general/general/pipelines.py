@@ -42,7 +42,7 @@ class DBPipeline(object):
             'ZMulItem':self.storeZMulItem,
             'ZSinItem':self.storeZSinItem,
             }
-        self.db='gubaupdate'
+        self.db='guba'
         self.conn = MySQLdb.Connect( user='root',  db=self.db,charset='utf8')
         self.cursor=self.conn.cursor() 
         self.crawldate=time.strftime("%Y-%m-%d",time.localtime())
@@ -70,7 +70,7 @@ class DBPipeline(object):
             try:
                 self.cursor.execute("insert ignore into `gubarticleupdate%s` (title,articleid,stockno,reply,click,crawldate) value ('%s',%s,'%s',%s,%s,'%s')"% ((self.stockno,)+instance))
             except Exception,e:
-                sendmail(u'数据库错误:'+unicode(e)+unicode(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())))
+                sendmail(u'数据库错误XMulItem:'+unicode(e)+unicode(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())))
                 while True:
                     try:
                         self.conn = MySQLdb.Connect( user='root',  db=self.db,charset='utf8')
@@ -97,10 +97,10 @@ class DBPipeline(object):
         itemlist=zip(item['YcommentAuthor'],item['YcommentDate'],item['YcommentContent'],item['YcommentAuthorid'],item['Yarticleid'])
         for instance in itemlist:
             try:
-                point = self.spider.sentiM.getPolarity(instance[2])
-                self.cursor.execute("insert ignore into `reply%s` (point,commentAuthor,commentDate,commentContent,commentAuthorid,articleid) value ( %f,'%s','%s','%s',%s,%s)"% ((self.stockno,point)+instance))
+                
+                self.cursor.execute("insert ignore into `reply%s` (commentAuthor,commentDate,commentContent,commentAuthorid,articleid) value ('%s','%s','%s',%s,%s)"% ((self.stockno,)+instance))
             except Exception,e:
-                sendmail(u'数据库错误:'+unicode(e)+unicode(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())))
+                sendmail(u'数据库错误YMulItem:'+unicode(e)+unicode(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())))
                 while True:
                     try:
                         self.conn = MySQLdb.Connect( user='root',  db=self.db,charset='utf8')
@@ -116,10 +116,10 @@ class DBPipeline(object):
     def storeYSinItem(self,item):
         instance=(item['Ytitle'],item['Yauthor'],item['Ystockno'],item['Ydate'],item['Ycontent'],item['Yarticleid'])
         try:
-            contentpoint = self.spider.sentiM.getPolarity(instance[4])
-            self.cursor.execute("insert ignore into `article%s` (point,title,author,stockno,time,content,articleid) value (%f,'%s','%s','%s','%s','%s',%s)"% ((self.stockno,contentpoint)+instance))#insert ignore会自动避免重复插入
+            
+            self.cursor.execute("insert ignore into `article%s` (title,author,stockno,time,content,articleid) value ('%s','%s','%s','%s','%s',%s)"% ((self.stockno,)+instance))#insert ignore会自动避免重复插入
         except Exception,e:
-            sendmail(u'数据库错误:'+unicode(e)+unicode(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())))
+            sendmail(u'数据库错误YSinItem:'+unicode(e)+unicode(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())))
             while True:
                 try:
                     self.conn = MySQLdb.Connect( user='root',  db=self.db,charset='utf8')
@@ -136,10 +136,9 @@ class DBPipeline(object):
         itemlist=zip(item['ZcommentAuthor'],item['ZcommentDate'],item['ZcommentContent'],item['ZcommentAuthorid'],item['Zarticleid'])
         for instance in itemlist:
             try:
-                point = self.spider.sentiM.getPolarity(instance[2])
-                self.cursor.execute("insert ignore into `reply%s` (point,commentAuthor,commentDate,commentContent,commentAuthorid,articleid) value ( %f,'%s','%s','%s',%s,%s)"% ((self.stockno,point)+instance))
+                self.cursor.execute("insert ignore into `reply%s` (commentAuthor,commentDate,commentContent,commentAuthorid,articleid) value ('%s','%s','%s',%s,%s)"% ((self.stockno,)+instance))
             except Exception,e:
-                sendmail(u'数据库错误:'+unicode(e)+unicode(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())))
+                sendmail(u'数据库错误ZMulItem:'+unicode(e)+unicode(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())))
                 while True:
                     try:
                         self.conn = MySQLdb.Connect( user='root',  db=self.db,charset='utf8')

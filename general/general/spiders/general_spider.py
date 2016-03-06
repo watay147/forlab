@@ -84,14 +84,14 @@ class GeneralSpider(scrapy.Spider):
 
     def __init__(self):
         #启动对浏览器的操控
-        import os
-        tree=ET.parse('conf/AppConfig.xml')
-        project_path=tree.find("project_path").text
-        os.environ['CLASSPATH']=project_path+'sa.jar'
-        import jnius
-        from jnius import autoclass
-        sentiClassifier = autoclass('sentiClassifier.EnsemblePolarityClassifier')
-        self.sentiM=sentiClassifier()
+        #import os
+        #tree=ET.parse('conf/AppConfig.xml')
+        #project_path=tree.find("project_path").text
+        #os.environ['CLASSPATH']=project_path+'sa.jar'
+        #import jnius
+        #from jnius import autoclass
+        #sentiClassifier = autoclass('sentiClassifier.EnsemblePolarityClassifier')
+        #self.sentiM=sentiClassifier()
 
         with open("conf/spiderConf.txt") as f:
             conf=eval(f.read())
@@ -239,7 +239,8 @@ class GeneralSpider(scrapy.Spider):
         #爬取X页的多重属性
         if self.should_end:
             endDate=self.extractDate(response.xpath(self.XendDate)[0].extract())
-            if endDate >"00" and endDate <"03":
+            print "===================pageDate:"+endDate
+            if endDate >"00" and endDate <"04":
                 pass
             elif endDate<self.end_date:
                 return
