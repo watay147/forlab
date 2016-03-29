@@ -36,6 +36,7 @@ import time
 import datetime
 from collections import deque
 from selenium import webdriver
+from selenium.webdriver import FirefoxProfile
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import re
@@ -105,7 +106,14 @@ class GeneralSpider(scrapy.Spider):
         startf=open('start.txt')#相对路径起点是project根目录
         self.start_urls=[startf.read()]
         startf.close()
-        self.browser= webdriver.Firefox()
+        #http://blog.csdn.net/sunjiajiang/article/details/32961379
+        #http://www.cnblogs.com/puresoul/p/4251536.html
+        profile=FirefoxProfile()
+        profile.set_preference("browser.cache.disk.parent_directory","E:\\Temp")
+        profile.set_preference("browser.cache.offline.parent_directory","E:\\Temp")
+
+
+        self.browser= webdriver.Firefox(firefox_profile=profile)
         self.browser.get("http://www.baidu.com")
         self.browser.implicitly_wait(60)
         self.f=open('test.txt','w')#用于存储测试输出内容的文本文件
