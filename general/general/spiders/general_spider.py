@@ -242,9 +242,7 @@ class GeneralSpider(scrapy.Spider):
         if self.should_end:
             endDate=self.extractDate(response.xpath(self.XendDate)[0].extract())
             print "===================pageDate:"+endDate
-            if endDate >"00" and endDate <"04":
-                pass
-            elif endDate<self.end_date:
+            if endDate<self.end_date:
                 return
 
 
