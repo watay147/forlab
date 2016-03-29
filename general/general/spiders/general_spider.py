@@ -33,6 +33,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.header import Header
 import time
+import datetime
 from collections import deque
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
@@ -97,7 +98,8 @@ class GeneralSpider(scrapy.Spider):
             conf=eval(f.read())
             self.should_end=conf.get("should_end",False)
             if self.should_end:
-                self.end_date=conf.get("end_date",time.strftime("%m-%d",time.localtime()))
+                yes_time = datetime.datetime.now() + datetime.timedelta(days=-1)
+                self.end_date=conf.get("end_date",yes_time.strftime("%m-%d"))
 
 
         startf=open('start.txt')#相对路径起点是project根目录
