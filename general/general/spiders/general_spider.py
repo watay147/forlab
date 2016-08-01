@@ -81,6 +81,7 @@ class GeneralSpider(scrapy.Spider):
     XendDate="//div[@class='articleh']/span[5]"
     should_end=False
     end_date=""
+    cache_dir="E:\\Temp"
     
 
 
@@ -98,6 +99,8 @@ class GeneralSpider(scrapy.Spider):
         with open("conf/spiderConf.txt") as f:
             conf=eval(f.read())
             self.should_end=conf.get("should_end",False)
+            self.cache_dir=conf.get("cache_dir","E:\\Temp")
+
             if self.should_end:
                 yes_time = datetime.datetime.now() + datetime.timedelta(days=-1)
                 self.end_date=conf.get("end_date",yes_time.strftime("%m-%d"))
@@ -109,8 +112,8 @@ class GeneralSpider(scrapy.Spider):
         #http://blog.csdn.net/sunjiajiang/article/details/32961379
         #http://www.cnblogs.com/puresoul/p/4251536.html
         profile=FirefoxProfile()
-        profile.set_preference("browser.cache.disk.parent_directory","E:\\Temp")
-        profile.set_preference("browser.cache.offline.parent_directory","E:\\Temp")
+        profile.set_preference("browser.cache.disk.parent_directory",self.cache_dir)
+        profile.set_preference("browser.cache.offline.parent_directory",self.cache_dir)
 
 
         self.browser= webdriver.Firefox(firefox_profile=profile)
