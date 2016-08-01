@@ -1,2 +1,1 @@
 python rerun.py
-pause
